@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silky Dashboard | Future Tech</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Professional Static CSS Link -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div>
+            <div class="brand">
+                ⚡ FutureTech
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active"><span>📊</span> Dashboard</a></li>
+                <li><a href="#" class="nav-link"><span>🌐</span> Network</a></li>
+                <li><a href="#" class="nav-link"><span>🛡️</span> Security</a></li>
+                <li><a href="#" class="nav-link"><span>⚙️</span> Settings</a></li>
+            </ul>
+        </div>
+        <div class="server-status">
+            <span class="status-dot"></span> Django 6.1 Server Live
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <header>
+            <div class="header-title">
+                <h1>Welcome Back, {{ username }} 👋</h1>
+                <p>Role: {{ role }} | Static CSS & Full CRUD Pipeline Active.</p>
+            </div>
+            <div class="user-profile">
+                <div class="avatar">BW</div>
+                <span style="font-size: 0.9rem; font-weight: 600;">{{ username }}</span>
+            </div>
+        </header>
+
+        <!-- Metric Cards Grid (Powered by Django ORM Database) -->
+        <section class="metrics-grid">
+            {% for metric in metrics %}
+            <div class="card">
+                <div class="card-header">
+                    <span>{{ metric.title }}</span>
+                    <!-- Delete Button Form -->
+                    <form action="{% url 'delete_metric' metric.id %}" method="POST" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete" title="Delete Metric">&times;</button>
+                    </form>
+                </div>
+                <div class="card-value" style="color: #4facfe;">{{ metric.value }}</div>
+                <span class="badge badge-success">{{ metric.badge_text }}</span>
+            </div>
+            {% empty %}
+            <div class="card">
+                <div class="card-header"><span>NO METRICS FOUND</span></div>
+                <div class="card-value" style="color: #94a3b8;">0</div>
+                <span class="badge" style="background: rgba(255,255,255,0.05); color: #94a3b8;">Use form below to add cards</span>
+            </div>
+            {% endfor %}
+        </section>
+
+        <!-- Large Content Panels & Form Integration -->
+        <section class="panel-section">
+            <div class="card" style="min-height: 220px;">
+                <div class="card-header">
+                    <span>APPLICATION OVERVIEW</span>
+                </div>
+                <h3 style="margin-bottom: 10px; color: var(--text-main);">Static Files Architecture</h3>
+                <p style="color: var(--text-muted); line-height: 1.6; font-size: 0.95rem;">
+                    Your stylesheets are now cleanly extracted into <code>static/css/style.css</code> and loaded via Django's <code>{% load static %}</code> pipeline. Framework: <strong>{{ framework }}</strong>.
+                </p>
+            </div>
+
+            <!-- Interactive Add Metric Form Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span>ADD NEW METRIC</span>
+                    <span>➕</span>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <label class="form-label">Metric Title</label>
+                    {{ form.title }}
+
+                    <label class="form-label">Metric Value</label>
+                    {{ form.value }}
+
+                    <label class="form-label">Badge Status</label>
+                    {{ form.badge_text }}
+
+                    <button type="submit" class="btn-submit">Save Metric 🚀</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
